@@ -14,7 +14,7 @@ type Server struct {
 	sendChanSize int
 }
 
-func NewServer(l net.Listener, p Protocol, sendChanSize int) {
+func NewServer(l net.Listener, p Protocol, sendChanSize int) *Server {
 	return &Server{
 		manager:      NewManager(),
 		listener:     l,

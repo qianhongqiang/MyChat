@@ -34,7 +34,7 @@ func newSession(manager *Manager, codec Codec, sendChanSize int) *Session {
 		codec:     codec,
 		manager:   manager,
 		closeChan: make(chan int),
-		id:        atomic.AddInt64(&globalSessionId, 1),
+		id:        atomic.AddUint64(&globalSessionId, 1),
 	}
 	if sendChanSize > 0 {
 		session.sendChan = make(chan interface{}, sendChanSize)
@@ -43,7 +43,7 @@ func newSession(manager *Manager, codec Codec, sendChanSize int) *Session {
 	return session
 }
 
-func (session *Session) ID() int64 {
+func (session *Session) ID() uint64 {
 	return session.id
 }
 
@@ -68,7 +68,7 @@ func (session *Session) Receive() ([]byte, error) {
 	return msg, err
 }
 
-func (session *Session) Send(msg interface{}) error {
+func (session *Session) Send(msg interface{}) (err error) {
 	if session.isCloesd() {
 		return sesstionCloseErr
 	}

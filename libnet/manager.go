@@ -15,13 +15,13 @@ type Manager struct {
 
 type SessionMap struct {
 	sync.RWMutex
-	sessions map[int64]*Session
+	sessions map[uint64]*Session
 }
 
 func NewManager() *Manager {
 	manager := &Manager{}
 	for i := 0; i < len(manager.sessionsMap); i++ {
-		manager.sessionsMap[i].sessions = make(map[int64]*Session)
+		manager.sessionsMap[i].sessions = make(map[uint64]*Session)
 	}
 	return manager
 }
@@ -47,7 +47,7 @@ func (manager *Manager) NewSession(codec Codec, sendChanSize int) *Session {
 	return session
 }
 
-func (manager *Manager) getSession(sessionID int64) *Session {
+func (manager *Manager) getSession(sessionID uint64) *Session {
 	smap := &manager.sessionsMap[sessionID%sessionMapNum]
 	smap.RLock()
 	defer smap.RUnlock()
